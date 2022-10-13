@@ -1,15 +1,20 @@
 // method : post
 // url : api/auth/login
 // acces : Public
-const Login =  (req,res) => {
+const Login = async(req,res) => {
+    if(!req.body.username || !req.body.password){
+        res.status(400)
+        throw new Error("please enter a username and password")
+    }
     res.status(200).send('this a login function')
+    
 }
 
 // method : post
 // url : api/auth/register
 // acces : Public
 
-const Register =  (req,res) => {
+const Register = async(req,res) => {
     res.status(200).send('this a register function')
 }
 
@@ -17,7 +22,7 @@ const Register =  (req,res) => {
 // url : api/auth/Forgetpassword
 // acces : Public
 
-const ForgetPassword =  (req,res) => {
+const ForgetPassword = async(req,res) => {
     res.status(200).send('this a Forget Password function')
 }
 
@@ -25,7 +30,7 @@ const ForgetPassword =  (req,res) => {
 // url : api/auth/resetpassword
 // acces : Public
 
-const ResetPassword =  (req,res) => {
+const ResetPassword = async(req,res) => {
     res.status(200).send('this a reset Password function')
 }
 
