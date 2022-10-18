@@ -3,7 +3,9 @@ const router = express.Router()
 
 const{GetUserManager} = require('../Controllers/managerController')
 
+const {requiredLogin} = require('../Middleware/authMiddleware')
 
-router.get('/manager',GetUserManager)
+
+router.get('/manager/me',requiredLogin,GetUserManager)
 
 module.exports = router

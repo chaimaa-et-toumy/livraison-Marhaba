@@ -3,6 +3,8 @@ const router = express.Router()
 
 const{GetUserClient} = require('../Controllers/clientController')
 
-router.get('/client',GetUserClient)
+const {requiredLogin} = require('../Middleware/authMiddleware')
+
+router.get('/client/me',requiredLogin,GetUserClient)
 
 module.exports = router

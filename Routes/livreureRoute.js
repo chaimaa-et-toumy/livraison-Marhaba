@@ -3,6 +3,8 @@ const router = express.Router()
 
 const{GetUserLivreure} = require('../Controllers/livreureController')
 
-router.get('/livreure',GetUserLivreure)
+const {requiredLogin} = require('../Middleware/authMiddleware')
+
+router.get('/livreure/me',requiredLogin,GetUserLivreure)
 
 module.exports = router

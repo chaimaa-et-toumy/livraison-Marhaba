@@ -9,7 +9,6 @@ const connectDb = require('./config/DbConfig')
 
 connectDb()
 const app = express()
-
 app.use(express.json())
 app.use(express.urlencoded({ extended : false}))
 
