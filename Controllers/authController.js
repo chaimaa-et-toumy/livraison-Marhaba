@@ -3,7 +3,7 @@ const bycrpt = require('bcryptjs')
 const nodemailer = require('nodemailer')
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
-const {sendEmail} = require('../Utils/sendEmail')
+const {sendEmail,forgetPassword} = require('../Utils/sendEmail')
 
 // method : post
 // url : api/auth/login
@@ -66,6 +66,7 @@ const Register = async(req,res) => {
         eToken : crypto.randomBytes(64).toString('hex'),
         isVerifed : false
     })
+
     sendEmail(req,user_,res)
     
     if(user_){
@@ -90,7 +91,24 @@ const Register = async(req,res) => {
 // acces : Public
 
 const ForgetPassword = async(req,res) => {
-    res.status(200).send('this a Forget Password function')
+    const email = req.body.email
+    if(!email){
+        res.send("email is required")
+    }
+    const user_ = await user.findOne({email})
+
+    if(user_){
+        res.status(201).json({
+        _id : user_.id,
+        email : user_.email,
+        etoken : jwt.sign({_id : user_.id}, process.env.JWT_SECRET , {expiresIn : '10m'})
+    })
+
+    forgetPassword(req,user_,res)
+    }
+    else{
+        res.status(404).send("user not found")
+    }
 }
 
 // method : post
@@ -98,7 +116,7 @@ const ForgetPassword = async(req,res) => {
 // acces : Public
 
 const ResetPassword = async(req,res) => {
-    res.status(200).send('this a reset Password function')
+ res.send("hi")
 }
 
 
@@ -110,16 +128,36 @@ const verify_email = async(req,res) => {
             user_.eToken = null,
             user_.isVerifed = true
             await user_.save()
-            res.send("email is  verified")
+            console.log("email is verified")
         }
         else{
             console.log("email is not verified")
-            res.send("email is not verified")
         }
     } catch (error) {
         console.log(error)
     }
 }
+
+const verify_email_rest = async(req,res) => {
+    try {
+        let token = req.params.token
+        const user_ = await user.findOne({etoken : token})
+    if(user_){
+        user_.etoken = null,
+        await user_.save()
+        res.send("reset")
+        console.log("password is verified")
+
+    }
+    else{
+        console.log("password is not verified")
+        res.send("password is not verified")
+    }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 // generate jwt 'token'
 
@@ -132,5 +170,6 @@ module.exports = {
     Register,
     ForgetPassword,
     ResetPassword,
-    verify_email
+    verify_email,
+    verify_email_rest
 }
