@@ -18,18 +18,17 @@ const Login = async(req,res) => {
 
     // check user email
     const user_ = await user.findOne({email})
-    
-    if(user_ && (await bycrpt.compare(password,user_.password))){
+    // verify_email(req,res)
+    if(user_ && (await bycrpt.compare(password,user_.password)) && user_.isVerifed === true){
         res.status(200).json({
             _id : user_.id,
             name : user_.name,
             email : user_.email,
             token : generateToken(user_.id)
         })
-        verify_email(req,res)
     }
     else{
-        res.status(400).send("invalid data")
+        res.status(400).send("invalid data or is mail is not verified")
     } 
 
 }
@@ -107,7 +106,8 @@ const ForgetPassword = async(req,res) => {
     forgetPassword(req,user_,res)
     }
     else{
-        res.status(404).send("user not found")
+        res.status(404)
+        console.log("user not found")
     }
 }
 
@@ -116,7 +116,27 @@ const ForgetPassword = async(req,res) => {
 // acces : Public
 
 const ResetPassword = async(req,res) => {
- res.send("hi")
+    const password = req.body.password
+    let token = req.params.token
+    if(!password){
+        res.status(400)
+        console.log("password is required")
+    }
+    else{
+        const user_ = await user.findOne({etoken : token})
+        if(user_ && user_.isReset === true){
+            user_.password = password
+            res.status(200)
+            console.log("password is reset")
+            await user_.save()
+        }
+        else{
+            res.status(400)
+            console.log('password is not reset')
+        } 
+    }
+    
+    
 }
 
 
@@ -129,9 +149,11 @@ const verify_email = async(req,res) => {
             user_.isVerifed = true
             await user_.save()
             console.log("email is verified")
+            res.send("email is verified")
         }
         else{
             console.log("email is not verified")
+            // res.send("email is not verified")
         }
     } catch (error) {
         console.log(error)
@@ -143,15 +165,13 @@ const verify_email_rest = async(req,res) => {
         let token = req.params.token
         const user_ = await user.findOne({etoken : token})
     if(user_){
-        user_.etoken = null,
+        user_.isReset = true,
         await user_.save()
-        res.send("reset")
-        console.log("password is verified")
-
+        res.send("password is verified")
     }
     else{
+        // res.send("password is not verified")
         console.log("password is not verified")
-        res.send("password is not verified")
     }
     } catch (error) {
         console.log(error)

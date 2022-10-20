@@ -25,6 +25,10 @@ const userSchema = moongose.Schema({
         type : String
     },
     isVerifed : {
+        type : Boolean,
+        default : false
+    },
+    isReset : {
         type : Boolean
     },
     role : {
