@@ -4,6 +4,7 @@ const router = require('./Routes/authRoute')
 const routerUserClient = require('./Routes/clientRoute')
 const routerUserLivreure = require('./Routes/livreureRoute')
 const routerUserManager = require('./Routes/managerRoute')
+const routerUserLogout = require('./Routes/logout')
 const errRoute = require('./Middleware/RouterError')
 const connectDb = require('./config/DbConfig')
 
@@ -13,7 +14,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended : false}))
 
 app.use('/api/auth',router)
-app.use('/api/user',[routerUserClient,routerUserLivreure,routerUserManager])
+app.use('/api/user',[routerUserClient,routerUserLivreure,routerUserManager,routerUserLogout])
 app.use(errRoute)
 
 const port = process.env.PORT || 8080
