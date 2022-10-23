@@ -12,11 +12,19 @@ const GetUserClient = async (req,res) => {
     if(token) {
         const decode = jwt.verify(token, process.env.JWT_SECRET);
         const id = decode.id
-        const user = await User.findOne({_id: id})
-        // const role = user.role
+        // let role = decode.role
+        const user = await User.findOne({_id: id}).populate("role")
 
-}  
-    
+        console.log(user)
+
+        if(user  && user.role.role === "client"){
+            res.send('Bonjour '+user.name +' , votre rôle est : '+user.role.role)
+        }
+        else{
+            console.log("you don't have acces to this page")
+        }
+        // console.log(role)
+}
 }
 
 module.exports = {
