@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 let ls = require('local-storage');
 const {sendEmail,forgetPassword} = require('../Utils/sendEmail')
+const { decode } = require('punycode')
 
 // method : post
 // url : api/auth/login
@@ -159,6 +160,12 @@ const ResetPassword = async(req,res) => {
     
 }
 
+const logout = (req,res) => {
+    if(ls('token')){
+        ls.remove('token')
+        console.log("logout succussifly")
+    }
+}
 
 const verify_email = async(req,res) => {
     try {
@@ -210,6 +217,7 @@ module.exports = {
     Register,
     ForgetPassword,
     ResetPassword,
+    logout,
     verify_email,
     verify_email_rest
 }
