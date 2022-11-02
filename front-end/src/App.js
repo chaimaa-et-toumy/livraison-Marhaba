@@ -7,6 +7,7 @@ import Login from "./Components/Login";
 import Notfound from "./Components/Notfound";
 import Forgotpasswod from "./Components/Forgotpasswod";
 import Home from "./Components/Home";
+import EmailVerify from "./Components/EmailVerify";
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path="/Login" element = {<Login />}  />
         <Route  path="/Forgotpassword" element = {<Forgotpasswod/>} />
         <Route path="*" element = {<Notfound/>} />
+        <Route path="/EmailVerify" element = {<EmailVerify/>}></Route>
       </Routes>
       
     </BrowserRouter>

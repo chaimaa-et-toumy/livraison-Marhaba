@@ -20,18 +20,18 @@ const Login = async(req,res) => {
 
     // check user email
     const user_ = await user.findOne({email})
-    let token = generateToken(user_.id,user_.email,user_.name)
     if(user_ && (await bycrpt.compare(password,user_.password)) && user_.isVerifed === true){
+        let token = generateToken(user_._id,user_.email,user_.name)
         ls('token', token)
         res.status(200).json({
-            _id : user_.id,
+            _id : user_._id,
             name : user_.name,
             email : user_.email,
             token : token
         })
     }
     else{
-        res.status(400).send("invalid data or email is not verified")
+        res.status(400).send('invalid data or email is not verified')
     } 
 
 }
@@ -42,7 +42,6 @@ const Login = async(req,res) => {
 
 const Register = async(req,res) => {
     const {name , email , password , role} = req.body
-    // let role = 'client'
 
     // if empty
     if(!name || !email || !password || !role){

@@ -1,6 +1,7 @@
 import React, { useState , useEffect } from "react";
 import Input from "./childCompenent/Input";
-import {Link } from "react-router-dom";
+import {Link, useNavigate } from "react-router-dom";
+
 import axios from "axios";
 
 function Register() {
@@ -9,6 +10,7 @@ function Register() {
   const [formValues, setFormValues] = useState(InitialValues)
   const [formErrors, setFormErrors] = useState({})
   const [isSubmit, setIsSubmit] = useState(false)
+  const navigate = useNavigate();
 
   const url = 'http://localhost:8080/api/auth/register'
   const data = {}
@@ -24,16 +26,15 @@ function Register() {
     console.log(formErrors);
     setIsSubmit(true)
 
-// if (!formErrors){
   await axios.post(url,formValues)
     .then((response)=>{
       console.log(response.data)
+      navigate("/EmailVerify")
     })
     .catch((err)=>{
       console.log(err)
-      // setFormErrors({email:response.data});
+      setFormErrors({email:err.response.data}); 
     })
-// }
     
   }
 

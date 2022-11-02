@@ -26,9 +26,11 @@ function Home() {
         }
         <div>
           <h2 className="fs-4 text-center d-flex justify-content-center">Welcome to our Application Marhaba</h2>
-          <button className="rounded fw-bold">Login
-                      <i className="zmdi zmdi-arrow-right"></i>
-          </button>
+          <Link className="nav-link" to={'/Login'}>
+            <button className="rounded fw-bold">Login
+                        <i className="zmdi zmdi-arrow-right"></i>
+            </button>
+          </Link>
         </div>
 
       </div>
