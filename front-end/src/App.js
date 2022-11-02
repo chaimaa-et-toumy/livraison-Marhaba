@@ -1,6 +1,6 @@
 // React Route
 import React from "react";
-import {BrowserRouter , Route , Routes  , NavLink} from  "react-router-dom"
+import {BrowserRouter , Route , Routes  } from  "react-router-dom"
 //components
 import Register from "./Components/Register";
 import Login from "./Components/Login";

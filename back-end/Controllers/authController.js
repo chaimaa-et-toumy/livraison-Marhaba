@@ -41,18 +41,20 @@ const Login = async(req,res) => {
 // acces : Public
 
 const Register = async(req,res) => {
-
     const {name , email , password , role} = req.body
+    // let role = 'client'
 
     // if empty
     if(!name || !email || !password || !role){
         res.status(400).send("Please add All fields")
+        return
     }
 
     // check if user exist
     const userExist = await user.findOne({email})
     if(userExist){
-        res.status(400).send("User already exist")
+         res.status(400).send("User already exist")
+         return
     }
 
 
@@ -70,6 +72,9 @@ const Register = async(req,res) => {
 
     
     // create user
+    try {
+        
+    
     const user_ = await user.create({
         name,
         email,
@@ -95,9 +100,9 @@ const Register = async(req,res) => {
             role
         })
     }
-    else{
-        res.status(400).send("invalid data")
-    }
+} catch (error) {
+        console.log(error)
+}
 
     
 }
