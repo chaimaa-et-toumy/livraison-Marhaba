@@ -10,7 +10,7 @@ var transporter = nodemailer.createTransport({
 
 // for verified email
 
-const sendEmail = (req,user,res) => {
+const sendEmail = async (req,user,res) => {
         const mailOptions = {
             from: ' "Verify your email" chaimaaet2001@gmail.com', 
             to: user.email,
@@ -19,13 +19,13 @@ const sendEmail = (req,user,res) => {
                 <h4> please verify your mail to continue ... </h4>
                 <a href="http://${req.headers.host}/api/auth/verify_email/${user.eToken}" >Verify your Email</a>`
         };
-    
-        transporter.sendMail(mailOptions, function (err, info) {
-            if(err)
-                console.log(err)
-            else
-                console.log("verification email is sent to your gmail account");
-        })
+
+        try {
+            await transporter.sendMail(mailOptions)
+            res.err = 'verification email is sent to your gmail account'
+        } catch (error) {
+            res.err = error.message || 'error'
+        }        
 };
  
 // for forget password

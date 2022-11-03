@@ -30,8 +30,11 @@ const Login = async(req,res) => {
             token : token
         })
     }
+    if(user_ && user_.isVerifed !== true){
+        res.status(400).send('verifie your email')
+    }
     else{
-        res.status(400).send('invalid data or email is not verified')
+        res.status(400).send('user not exist')
     } 
 
 }
@@ -61,7 +64,7 @@ const Register = async(req,res) => {
     const roles = await Role.findOne({role})
     
     if(!roles){
-        res.status(404).send("pas trouvez")
+        res.status(404).send("role is required")
         return
     }
 
@@ -81,11 +84,11 @@ const Register = async(req,res) => {
         eToken : crypto.randomBytes(64).toString('hex'),
         isVerifed : false,
         role : roles._id
-
     })
 
+    await sendEmail(req,user_,res)
 
-    sendEmail(req,user_,res)
+    // console.log(res.err);
     
     if(user_){
         res.status(201).json({
@@ -96,7 +99,8 @@ const Register = async(req,res) => {
             token : generateToken(user_.id),
             eToken : user_.eToken,
             isVerifed : user_.isVerifed,
-            role
+            role,
+            msg : res.err
         })
     }
 } catch (error) {

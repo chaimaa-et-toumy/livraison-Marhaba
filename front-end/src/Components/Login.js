@@ -7,7 +7,7 @@ import axios from "axios";
 function Login() {
     const InitialValues = {email:"", password:""}
     const [data, setDataValues] = useState(InitialValues)
-    const [formErrors, setFormErrors] = useState({})
+    const [errors, setErrors] = useState({})
     const [isSubmit, setIsSubmit] = useState(false)
 
     const handleChange = (e) =>{
@@ -17,8 +17,8 @@ function Login() {
 
     const handleSubmit = async(e) => {
         e.preventDefault()
-        await setFormErrors(validate(data))
-        console.log(formErrors);
+        await setErrors(validate(data))
+        console.log(errors);
         setIsSubmit(true)
 
     try {
@@ -28,15 +28,15 @@ function Login() {
         window.location = "/"
     } catch (error) {
         console.log(error)
-        setFormErrors({email:error.response.data}); 
+        setErrors({email:error.response.data}); 
 
     }
       }
       useEffect(()=>{
-        if(Object.keys(formErrors).length === 0 && isSubmit){
+        if(Object.keys(errors).length === 0 && isSubmit){
           console.log(data)
         }
-      },[formErrors])
+      },[errors])
 
       const validate = (values) =>{
         const errors = {}
@@ -62,7 +62,7 @@ function Login() {
               </div>
               <form action="" style={{marginTop : "75px"}} onSubmit={handleSubmit}>
                   <h3>Marhaba</h3>
-                  <p className="text-danger">{formErrors.email}</p>
+                  <p className="text-danger">{errors.email}</p>
                   <Input 
                     className="form-wrapper" 
                     type="text" name="email" 
@@ -72,7 +72,7 @@ function Login() {
                     value={data.email} 
                     onChange = {handleChange}
                   />
-                  <p className="text-danger">{formErrors.password}</p>
+                  <p className="text-danger">{errors.password}</p>
                   <Input 
                     className="form-wrapper" 
                     type="password" 
