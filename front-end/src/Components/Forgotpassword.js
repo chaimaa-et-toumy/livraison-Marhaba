@@ -1,7 +1,9 @@
 import React , {useState} from 'react'
 import Input from './childCompenent/Input'
 import axios from 'axios'
-import Swal from "sweetalert2";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+// import Swal from "sweetalert2";
 
 
 function Forgotpassword() {
@@ -12,6 +14,8 @@ function Forgotpassword() {
 
   const url = 'http://localhost:8080/api/auth/forgetpassword'
   const data = {}
+
+  // response.data.msg
 
   const handleChange = (e) => {
     const {name,value} = e.target
@@ -34,25 +38,28 @@ function Forgotpassword() {
     if(!err){
       await axios.post(url,formValues)
       .then((response)=>{
-        console.log(response.data)
-        setErrors({email:response.data});
-        Swal.fire({
-          position: 'center',
-          icon: 'success',
-          title: `<div class="fs-5">${response.data.msg}</div>`,
-          showConfirmButton: false,
-          footer: `<button><a href="/resetpassword/:token" class='text-white fw-bold'>go to reset</a></button>` ,
-          timer: 4000
-        })
+        // console.log(response.data)
+        // setErrors({email:response.data.msg});
+        
+          toast.info(response.data.msg ,{
+            position: "top-right",
+            autoClose: 6000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            });
+        
       })
-      .catch((err)=>{
-        console.log(err.response.data)
+       .catch((err)=>{
+        console.log(err)
         setErrors({email:err.response.data}); 
       })  
     }
      
-  }
-       
+  }    
     return (
       <div className="wrapper" style={{backgroundImage: `url('images/bg-registration-form-1.jpg')`}}>
           <div className="inners">
@@ -73,6 +80,7 @@ function Forgotpassword() {
                 <button>Forgot
                   <i className="zmdi zmdi-arrow-right"></i>
                 </button>
+                <ToastContainer />
               </form>          
           </div>
       </div>
