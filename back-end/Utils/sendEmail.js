@@ -10,7 +10,7 @@ var transporter = nodemailer.createTransport({
 
 // for verified email
 
-const sendEmail = async (req,user,res) => {
+const sendEmail = (req,user,res) => {
         const mailOptions = {
             from: ' "Verify your email" chaimaaet2001@gmail.com', 
             to: user.email,
@@ -21,10 +21,11 @@ const sendEmail = async (req,user,res) => {
         };
 
         try {
-            await transporter.sendMail(mailOptions)
-            res.err = 'verification email is sent to your gmail account'
+            transporter.sendMail(mailOptions)
+            // res.message = 'verification email is sent to your gmail account'
+            res.message = "verification is sent to your email, go to verification and click the button below to login"
         } catch (error) {
-            res.err = error.message || 'error'
+            res.message = error.message || 'error'
         }        
 };
  
@@ -36,15 +37,16 @@ const forgetPassword = (req,user,res) => {
         to: user.email,
         subject: 'Account Activation link', 
         html: `<h4> please click on given link to reset your password </h4>
-            <a href="http://${req.headers.host}/api/auth/forgetPassword/${user.etoken}" >click to reset password</a>`
+            <a href="http://${req.headers.host}/api/auth/forgetPassword/${user.eToken}" >click to reset password</a>`
     };
+    try {
+        transporter.sendMail(mailOptions)
+        res.err = 'the link to reset password is sent to your gmail account'
+    } catch (error) {
+        res.err = error.err || 'error'
+    } 
 
-    transporter.sendMail(mailOptions, function (err, info) {
-        if(err)
-            console.log(err)
-        else
-            console.log("the link to reset password  is sent to your gmail account");
-    })
+
 };
 
 module.exports = {sendEmail,forgetPassword}

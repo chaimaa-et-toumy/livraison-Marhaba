@@ -15,11 +15,14 @@ const Login = async(req,res) => {
     const {email,password} = req.body
 
     if(!email || !password){
-        res.status(400).send("please enter a username and password")
+         res.status(400).send("please enter a username and password")
+        
     }
 
     // check user email
+    try {
     const user_ = await user.findOne({email})
+
     if(user_ && (await bycrpt.compare(password,user_.password)) && user_.isVerifed === true){
         let token = generateToken(user_._id,user_.email,user_.name)
         ls('token', token)
@@ -27,15 +30,24 @@ const Login = async(req,res) => {
             _id : user_._id,
             name : user_.name,
             email : user_.email,
-            token : token
+            token : token,
         })
+    }else if(user_ && (await bycrpt.compare(password,user_.password)) && user_.isVerifed !== true){
+         res.status(400).send('first verify your email address to login')
+        
     }
-    if(user_ && user_.isVerifed !== true){
-        res.status(400).send('verifie your email')
+    else if(user_ && (await bycrpt.compare(password,user_.password) !== true)){
+          res.status(400).send('incorrect password')
+        
     }
     else{
-        res.status(400).send('user not exist')
+         res.status(400).send('user not exist')
+        
     } 
+}
+catch(error){
+     res.send(error)
+}
 
 }
 
@@ -100,7 +112,7 @@ const Register = async(req,res) => {
             eToken : user_.eToken,
             isVerifed : user_.isVerifed,
             role,
-            msg : res.err
+            msg : res.message
         })
     }
 } catch (error) {
@@ -121,18 +133,19 @@ const ForgetPassword = async(req,res) => {
     }
     const user_ = await user.findOne({email})
 
+
     if(user_){
+        await forgetPassword(req,user_,res)
         res.status(201).json({
         _id : user_.id,
         email : user_.email,
-        etoken : jwt.sign({_id : user_.id}, process.env.JWT_SECRET , {expiresIn : '10m'})
-    })
-
-    forgetPassword(req,user_,res)
+        etoken : jwt.sign({_id : user_.id}, process.env.JWT_SECRET , {expiresIn : '10m'}),
+        msg : res.err
+    })     
+   
     }
     else{
-        res.status(404)
-        console.log("user not found")
+        res.status(404).send("user not found")
     }
 }
 
@@ -184,15 +197,14 @@ const verify_email = async(req,res) => {
         const token = req.params.token
         const user_ = await user.findOne({eToken : token})
         if(user_){
-            user_.eToken = null,
+            // user_.eToken = null,
             user_.isVerifed = true
             await user_.save()
             console.log("email is verified")
-            res.send("email is verified")
+            res.redirect('http://localhost:3000/Login')
         }
         else{
             console.log("email is not verified")
-            // res.send("email is not verified")
         }
     } catch (error) {
         console.log(error)
@@ -206,11 +218,11 @@ const verify_email_rest = async(req,res) => {
     if(user_){
         user_.isReset = true,
         await user_.save()
-        res.send("password is verified")
+        res.redirect(`http://localhost:3000/resetpassword/:${token}`)
+
     }
     else{
-        // res.send("password is not verified")
-        console.log("password is not verified")
+        res.send("password is not verified")
     }
     } catch (error) {
         console.log(error)
