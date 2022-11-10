@@ -1,98 +1,96 @@
-import React, { useState , useEffect } from "react";
+import React, { useState} from "react";
 import Input from "./childCompenent/Input";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
+
 import axios from "axios";
 
-
 function Login() {
-    const InitialValues = {email:"", password:""}
-    const [data, setDataValues] = useState(InitialValues)
-    const [errors, setErrors] = useState({})
-    const [isSubmit, setIsSubmit] = useState(false)
 
-    const handleChange = (e) =>{
-        const {name,value} = e.target
-        setDataValues({...data , [name] : value})
+  let initialValues = {email:"",password:""}
+  let [errors, setErrors] = useState({...initialValues})
+  let [formValues, setFormValues] = useState({...initialValues})
+
+  const url = 'http://localhost:8080/api/auth/login'
+  const data = {}
+
+  const handleChange = (e) => {
+    const {name,value} = e.target
+    setFormValues({...formValues, [name] : value})
+    setErrors({...errors, [name]: ""})
+  }
+
+  const handleSubmit = async(e) => {
+    e.preventDefault()
+    let err = false;
+    let c = {email:"",password:""}
+  
+    if(!formValues.email){
+      c.email = "Email is required!"
+      err=true
     }
 
-    const handleSubmit = async(e) => {
-        e.preventDefault()
-        await setErrors(validate(data))
-        console.log(errors);
-        setIsSubmit(true)
+    if(!formValues.password){
+      c.password = "Password is required!"
+      err=true
+    }
 
-    try {
-        const url = 'http://localhost:8080/api/auth/login'
-        const{data:res} = await axios.post(url,data)
-        localStorage.setItem("token",res.data)
+    if(err) {
+      setErrors(c)
+    }
+    if(!err){
+      await axios.post(url,formValues)
+      .then((response)=>{
+        console.log(response.data)
+        localStorage.setItem("token",response.data)
         window.location = "/"
-    } catch (error) {
-        console.log(error)
-        setErrors({email:error.response.data}); 
-
+      })
+      .catch((err)=>{
+        console.log(err.response.data)
+        setErrors({email:err.response.data}); 
+      })  
     }
-      }
-      useEffect(()=>{
-        if(Object.keys(errors).length === 0 && isSubmit){
-          console.log(data)
-        }
-      },[errors])
+     
+  }
 
-      const validate = (values) =>{
-        const errors = {}
-        
-
-        if(!values.email){
-          errors.email = "Email is required!"
-          
-        }
-        if(!values.password){
-          errors.password = "Password is required!"
-          
-        }
-        return errors
-      }
-
-
-    return (
-      <div className="wrapper" style={{backgroundImage: `url('images/bg-registration-form-1.jpg')`}}>
-          <div className="inner">
-              <div className="image-holder">
-                  <img src="images/registration-form-1.jpg" alt="" />
-              </div>
-              <form action="" style={{marginTop : "75px"}} onSubmit={handleSubmit}>
-                  <h3>Marhaba</h3>
-                  <p className="text-danger">{errors.email}</p>
-                  <Input 
-                    className="form-wrapper" 
-                    type="text" name="email" 
-                    placeholder="Email Address" 
-                    classInput="form-control" 
-                    classIcon="zmdi zmdi-email"
-                    value={data.email} 
-                    onChange = {handleChange}
-                  />
-                  <p className="text-danger">{errors.password}</p>
-                  <Input 
-                    className="form-wrapper" 
-                    type="password" 
-                    name="password" 
-                    placeholder="Password" 
-                    classInput="form-control" 
-                    classIcon="zmdi zmdi-lock" 
-                    value={data.password} 
-                    onChange = {handleChange}
-                  />
-                  <button>Login
-                      <i className="zmdi zmdi-arrow-right"></i>
-                  </button>
-                  <Link className="nav-link mt-4 text-dark text-center" to={'/Forgotpassword'}>Forgot password ?</Link>
-
-              </form>
-          </div>
+  return (
+  <div className="wrapper" style={{backgroundImage: `url('images/bg-registration-form-1.jpg')`}}>
+    <div className="inner">
+        <div className="image-holder">
+          <img src="images/registration-form-1.jpg" alt="img" />
+            </div>
+            <form className="mt-4" onSubmit={handleSubmit}>
+            <h3>Marhaba</h3>
+            <div className="text-danger">{errors.email}</div>
+            <Input 
+              className="form-wrapper" 
+              type="text" 
+              placeholder="Email Address" 
+              name="email"  
+              classInput="form-control" 
+              classIcon="zmdi zmdi-email" 
+              value={formValues.email}
+              onChange = {handleChange}
+            />
+            <div className="text-danger">{errors.password}</div>
+            <Input 
+              className="form-wrapper" 
+              type="password" 
+              placeholder="Password" 
+              name="password"  
+              classInput="form-control" 
+              classIcon="zmdi zmdi-lock" 
+              value={formValues.password}
+              onChange = {handleChange}
+              />
+            <button>Login
+              <i className="zmdi zmdi-arrow-right"></i>
+            </button>
+            <div className="text-center mt-4"><Link className="text-dark fw-bold" to={'/forgotpassword'}>Forgot password</Link> </div>
+            <div className="text-center mt-3">don't hava an account <Link className="text-dark fw-bold" to={'/register'}>Register</Link> </div>
+        </form>
       </div>
+  </div>
     );
   }
   
   export default  Login 
-  

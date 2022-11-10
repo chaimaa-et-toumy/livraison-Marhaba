@@ -5,9 +5,10 @@ import {BrowserRouter , Route , Routes  } from  "react-router-dom"
 import Register from "./Components/Register";
 import Login from "./Components/Login";
 import Notfound from "./Components/Notfound";
-import Forgotpasswod from "./Components/Forgotpasswod";
+// import Forgotpassword from "./Components/Forgotpassword";
 import Home from "./Components/Home";
-import EmailVerify from "./Components/EmailVerify";
+import ResetPassword from "./Components/ResetPassword";
+import Forgotpassword from "./Components/Forgotpassword";
 
 
 function App() {
@@ -17,9 +18,9 @@ function App() {
         <Route path="/" element = {<Home />}  />
         <Route path="/Register" element = {<Register />}  />
         <Route path="/Login" element = {<Login />}  />
-        <Route  path="/Forgotpassword" element = {<Forgotpasswod/>} />
+        <Route  path="/forgotpassword" element = {<Forgotpassword/>} />
+        <Route path="/resetpassword/:token" element = {<ResetPassword/>}></Route>
         <Route path="*" element = {<Notfound/>} />
-        <Route path="/EmailVerify" element = {<EmailVerify/>}></Route>
       </Routes>
       
     </BrowserRouter>

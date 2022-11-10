@@ -1,6 +1,8 @@
 import React, { useState} from "react";
 import Input from "./childCompenent/Input";
-import {Link , useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
+import Swal from "sweetalert2";
+
 
 import axios from "axios";
 
@@ -9,9 +11,8 @@ function Register() {
   let initialValues = {name:"",email:"",password:"",confirm_password:"", role:"" , msg:""}
   let [errors, setErrors] = useState({...initialValues})
   let [formValues, setFormValues] = useState({...initialValues})
-  // const [isSubmit, setIsSubmit] = useState(false)
-  // let x = false
-  const navigate = useNavigate();
+  console.log(formValues)
+
 
   const url = 'http://localhost:8080/api/auth/register'
   const data = {}
@@ -34,7 +35,7 @@ function Register() {
       c.name = "Username is required"
       err=true
     }
-    else if(!regexUsername.test(formValues.name)){
+    if(!regexUsername.test(formValues.name)){
       c.name = "Enter a valid name"
       err=true
     }
@@ -42,7 +43,7 @@ function Register() {
       c.email = "Email is required!"
       err=true
     }
-    else if(!regexEmail.test(formValues.email)){
+    if(!regexEmail.test(formValues.email)){
       c.email = "This is not a valid email format"
       err=true
     }
@@ -50,7 +51,7 @@ function Register() {
       c.password = "Password is required!"
       err=true
     }
-    else if(formValues.password.length < 4) {
+    if(formValues.password.length < 4) {
       c.password = "Password must be more than 4 characters"
       err=true
     }
@@ -58,7 +59,7 @@ function Register() {
       c.confirm_password = "Confirm password is required!"
       err=true
     }
-    else if(formValues.password !== formValues.confirm_password){
+    if(formValues.password !== formValues.confirm_password){
       c.confirm_password = "enter the same password"
       err=true
     }
@@ -71,18 +72,22 @@ function Register() {
       setErrors(c)
     }
 
-    if(!err){
+     if(!err){
       await axios.post(url,formValues)
       .then((response)=>{
-        console.log(response.data)
-        setErrors({msg:response.data.msg});
-        if(setErrors({msg:response.data.msg})){
-          navigate("/Login")
-        }
+        console.log(response.data.msg)           
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: `<div class="fs-5">${response.data.msg}<div>`,
+            showConfirmButton: false,
+            footer: `<button><a href="/Login" class='text-white fw-bold'>Login</a></button>` ,
+            timer: 4000
+          })
       })
       .catch((err)=>{
         console.log(err)
-        setErrors({msg:err.response.data}); 
+        setErrors({email:err.response.data}); 
       })  
     }
      
@@ -92,11 +97,10 @@ function Register() {
   <div className="wrapper" style={{backgroundImage: `url('images/bg-registration-form-1.jpg')`}}>
     <div className="inner">
         <div className="image-holder">
-          <img src="images/registration-form-1.jpg" alt="" />
+          <img src="images/registration-form-1.jpg" alt="img" />
             </div>
             <form className="mt-4" onSubmit={handleSubmit}>
             <h3>Marhaba</h3>
-            <p className="text-danger">{errors.msg}</p>
             <p className="text-danger">{errors.name}</p>
             <Input 
               className="form-wrapper"
