@@ -161,20 +161,17 @@ const ResetPassword = async(req,res) => {
      const salt = await bycrpt.genSalt(10)
 
     if(!password){
-        res.status(400)
-        console.log("password is required")
+        res.status(400).send("password is required")
     }
     else{
         const user_ = await user.findOne({etoken : token})
         if(user_ && user_.isReset === true){
             user_.password = await bycrpt.hash(password,salt)
-            res.status(200)
-            console.log("password is reset")
+            res.status(200).send("password is reset")
             await user_.save()
         }
         else{
-            res.status(400)
-            console.log('password is not reset')
+            res.status(400).send('password is not reset')
         } 
     }
     

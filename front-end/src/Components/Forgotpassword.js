@@ -38,27 +38,22 @@ function Forgotpassword() {
     if(!err){
       await axios.post(url,formValues)
       .then((response)=>{
-        // console.log(response.data)
-        // setErrors({email:response.data.msg});
-        
-          toast.info(response.data.msg ,{
-            position: "top-right",
-            autoClose: 6000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-            });
-        
+        toast.info(response.data.msg ,{
+          position: "top-right",
+          autoClose: 6000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          });
       })
        .catch((err)=>{
         console.log(err)
         setErrors({email:err.response.data}); 
       })  
     }
-     
   }    
     return (
       <div className="wrapper" style={{backgroundImage: `url('images/bg-registration-form-1.jpg')`}}>

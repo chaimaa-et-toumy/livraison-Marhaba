@@ -1,10 +1,17 @@
 import React, { useState } from 'react'
 import Input from './childCompenent/Input'
+import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function ResetPassword() {
   let initialValues = {password:"",confirm_password:""}
   let [errors, setErrors] = useState({...initialValues})
   let [formValues, setFormValues] = useState({...initialValues})
+
+  const url = 'http://localhost:8080/api/auth/resetpassword/:token'
+  const data = {}
 
   const handleChange = (e) => {
     const {name,value} = e.target
@@ -40,7 +47,24 @@ function ResetPassword() {
     }
 
      if(!err){
-        console.log("nice")
+      await axios.post(url,formValues)
+      .then((response)=>{
+        // console.log(response.data)
+        toast.info(response.data,{
+          position: "top-right",
+          autoClose: 6000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          });
+      })
+       .catch((err)=>{
+        console.log(err)
+        setErrors({password:err.response.data}); 
+      })  
       }
   }
 
@@ -77,6 +101,7 @@ function ResetPassword() {
           <button>reset
             <i className="zmdi zmdi-arrow-right"></i>
           </button>
+          <ToastContainer />
         </form>          
     </div>
     </div>

@@ -41,7 +41,7 @@ function Login() {
       await axios.post(url,formValues)
       .then((response)=>{
         console.log(response.data)
-        localStorage.setItem("token",response.data)
+        localStorage.setItem("token",JSON.stringify(response.data))
         window.location = "/"
       })
       .catch((err)=>{
@@ -56,9 +56,9 @@ function Login() {
   <div className="wrapper" style={{backgroundImage: `url('images/bg-registration-form-1.jpg')`}}>
     <div className="inner">
         <div className="image-holder">
-          <img src="images/registration-form-1.jpg" alt="img" />
+          <img src="images/registration-form-1.jpg" alt="img"/>
             </div>
-            <form className="mt-4" onSubmit={handleSubmit}>
+            <form style={{marginTop:"95px"}} onSubmit={handleSubmit}>
             <h3>Marhaba</h3>
             <div className="text-danger">{errors.email}</div>
             <Input 
