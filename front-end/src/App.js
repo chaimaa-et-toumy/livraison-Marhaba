@@ -9,19 +9,22 @@ import Home from "./Components/Home";
 import ResetPassword from "./Components/ResetPassword";
 import Forgotpassword from "./Components/Forgotpassword";
 import Profile from "./Components/Profile";
+import ProtectRoute from "./Utils/ProtectRoute";
 
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element = {<Home />}  />
-        <Route path="/Register" element = {<Register />}  />
-        <Route path="/Login" element = {<Login />}  />
-        <Route path="/profile" element = {<Profile />}  />
-        <Route path="/forgotpassword" element = {<Forgotpassword/>} />
-        <Route path="/resetpassword/:token" element = {<ResetPassword/>}></Route>
-        <Route path="/*" element = {<Notfound/>} />
+      <Route path="/" element = {<Home />}  />
+      <Route path="/Register" element = {<Register />}  />
+      <Route path="/Login" element = {<Login />}  />
+      <Route element = {<ProtectRoute />}  >
+          <Route path="/profile" element = {<Profile />}  />
+          <Route path="/forgotpassword" element = {<Forgotpassword/>} />
+          <Route path="/resetpassword/:token" element = {<ResetPassword/>}></Route>
+      </Route>
+      <Route path="/*" element = {<Notfound/>} />
       </Routes>
     </BrowserRouter>
   );
