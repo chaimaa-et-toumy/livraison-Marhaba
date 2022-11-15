@@ -1,16 +1,15 @@
-import React , {useEffect, useState} from 'react'
-// import Navbar from './childCompenent/Navbar'
- import axios from 'axios'
+import React , {useState} from 'react'
+import Navbar from './childCompenent/Navbar'
+import axios from 'axios'
 function Profile() {
-	let [message, setMessage] = useState()
+
+	let [data, setdata] = useState([])
+
 	const token_ = localStorage.getItem('token')
 	let fetch_ = JSON.parse(token_)
 	let role_ = fetch_.role
-	// let name_ = fetch_.name
-	// let email_ = fetch_.email
-	// document.write(role_)	
 
-	useEffect(() => {
+	console.log(role_)	
 
 		axios.get(`http://localhost:8080/api/user/${role_}/me`,{
 		headers: {
@@ -18,63 +17,46 @@ function Profile() {
 		}
 		})
 		.then((Response)=>{
-			setMessage(Response.data)
+			setdata({email:Response.data.email,name:Response.data.name,role:Response.data.role})
 			console.log(Response.data);
-			console.log(message)
 			
 		}).catch((Error)=>{
-			setMessage(Error.response.data);
+			console.log(Error.response.data);
 		})
-
-	},message);
-	
-	
-
-	
   return (
-    //  <div className="wrapper" style={{backgroundImage: `url('images/bg-registration-form-1.jpg')`}}>
-	// 	 <Navbar /> 
-	// 	  <div className="inner" style={{padding : "45px", marginTop:"70px"}}> 
-	// 		 <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12 w-50">
-	// 				<div class="card h-100 ">
-	// 				<div class="card-body ">
-	// 					<div class="account-settings">
-	// 						<div class="user-profile">
-	// 							<div class="user-avatar">
-	// 								<img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Maxwell Admin" />
-	// 							</div>
-	// 							<div className='text-center pt-4'>
-	// 								<h5 class="user-name">username : {name_}</h5>
-	// 							</div>
-	// 						</div>
-	// 					</div>
-	// 				</div>
-	// 			</div>
-	// 		</div>
-	// 		<div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12 w-50">
-	// 			<div class="card h-100">
-	// 				<div class="card-body">
-	// 					<div class="row gutters">
-	// 							<div class="mt-3 mb-2" style={{fontSize : "18px"}}>Name : </div>
-	// 							<div class="mt-3 mb-2" style={{fontSize : "18px"}}>Email : </div>
-	// 							<div class="mt-3 mb-2" style={{fontSize : "18px"}}>Phone :</div>
-	// 							<div class="mt-3 mb-2" style={{fontSize : "18px"}}>Address :</div>
-	// 							<div class="mt-3 mb-2" style={{fontSize : "18px"}}>Role : </div>
-	// 					</div>
-	// 					<div class="d-flex justify-content-center">
-	// 							<div class="text-right d-flex justify-content-centre">
-	// 								<button type="button" id="submit" name="submit" class="btn btn-dark">update</button>
-	// 							</div>
-	// 					</div>
-	// 				</div>
-	// 			</div>
-	// 		</div> 
-	// 	</div>
-	//  </div>
+     <div className="wrapper" style={{backgroundImage: `url('images/bg-registration-form-1.jpg')`}}>
+		 <Navbar /> 
+		  <div className="inner" style={{padding : "45px", marginTop:"70px"}}> 
+			 <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12 w-50">
+					<div class="card h-100 ">
+					<div class="card-body ">
+						<div class="account-settings">
+							<div class="user-profile">
+								<div class="user-avatar">
+									<img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Maxwell Admin" />
+								</div>
+								<div className='text-center pt-4'>
+									<div class="user-name h5">username : {data.name}</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12 w-50">
+				<div class="card h-100">
+					<div class="card-body">
+						<div class="row gutters" style={{marginTop:"80px"}}>
+								<div class="mt-3 mb-2" style={{fontSize : "18px"}}>Name : {data.name}</div>
+								<div class="mt-3 mb-2" style={{fontSize : "18px"}}>Email : {data.email}</div>
+								<div class="mt-3 mb-2" style={{fontSize : "18px"}}>Role : {data.role}</div>
+						</div>
+					</div>
+				</div>
+			</div> 
+		</div>
+	 </div>
 
-	<div>
-		{message}
-	</div>
   )
   }
 

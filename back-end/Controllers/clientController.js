@@ -17,7 +17,13 @@ const GetUserClient = async (req,res) => {
         console.log(user)
 
         if(user  && user.role.role === "client"){
-            res.send('Bonjour '+user.name +' , votre rôle est : '+user.role.role)
+            // res.send('Bonjour '+user.name +' , votre rôle est : '+user.role.role)
+            res.status(200).json({
+                _id : user.id,
+                name : user.name,
+                email : user.email,
+                role : user.role.role,
+            })
         }
         else{
             res.send("you don't have acces to this page")
