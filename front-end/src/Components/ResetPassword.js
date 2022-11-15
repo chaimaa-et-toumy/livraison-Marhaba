@@ -70,7 +70,7 @@ function ResetPassword() {
 
 
   return (
-    <div className="wrapper" style={{backgroundImage: `url('images/bg-registration-form-1.jpg')`}}>
+    <div className="wrapper" style={{backgroundImage: `url('../images/bg-registration-form-1.jpg')`}}>
     <div className="inners">
       <form action=""  onSubmit={handleSubmit}>
         <h2 className="text-center">Marhaba</h2>

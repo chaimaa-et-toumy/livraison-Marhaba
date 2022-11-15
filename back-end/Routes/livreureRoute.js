@@ -5,6 +5,6 @@ const{GetUserLivreure} = require('../Controllers/livreureController')
 
 const {requiredLogin} = require('../Middleware/authMiddleware')
 
-router.get('/livreure/me',requiredLogin,GetUserLivreure)
+router.get('/livreur/me',requiredLogin,GetUserLivreure)
 
 module.exports = router

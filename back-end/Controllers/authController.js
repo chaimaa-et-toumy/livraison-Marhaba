@@ -21,7 +21,8 @@ const Login = async(req,res) => {
 
     // check user email
     try {
-    const user_ = await user.findOne({email})
+    const user_ = await user.findOne({email}).populate("role")
+
 
     if(user_ && (await bycrpt.compare(password,user_.password)) && user_.isVerifed === true){
         let token = generateToken(user_._id,user_.email,user_.name)
@@ -30,6 +31,7 @@ const Login = async(req,res) => {
             _id : user_._id,
             name : user_.name,
             email : user_.email,
+            role : user_.role.role,
             token : token,
         })
     }else if(user_ && (await bycrpt.compare(password,user_.password)) && user_.isVerifed !== true){
@@ -185,7 +187,7 @@ const ResetPassword = async(req,res) => {
 const logout = (req,res) => {
     if(ls('token')){
         ls.remove('token')
-        console.log("logout succussifly")
+        res.send("logout succussifly")
     }
 }
 

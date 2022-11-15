@@ -42,7 +42,7 @@ function Login() {
       .then((response)=>{
         console.log(response.data)
         localStorage.setItem("token",JSON.stringify(response.data))
-        window.location = "/"
+        window.location = "/profile"
       })
       .catch((err)=>{
         console.log(err.response.data)
