@@ -1,4 +1,4 @@
-import React , {useState} from 'react'
+import React , {useState,useEffect} from 'react'
 import Navbar from './childCompenent/Navbar'
 import axios from 'axios'
 function Profile() {
@@ -11,6 +11,7 @@ function Profile() {
 
 	console.log(role_)	
 
+	useEffect(() => {
 		axios.get(`http://localhost:8080/api/user/${role_}/me`,{
 		headers: {
 			"Authorization": "Bearer " + token_
@@ -23,6 +24,9 @@ function Profile() {
 		}).catch((Error)=>{
 			console.log(Error.response.data);
 		})
+	},[]);
+
+		
   return (
      <div className="wrapper" style={{backgroundImage: `url('images/bg-registration-form-1.jpg')`}}>
 		 <Navbar /> 

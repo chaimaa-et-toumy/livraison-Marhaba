@@ -13,7 +13,7 @@ function Forgotpassword() {
   let [formValues, setFormValues] = useState({...initialValues})
 
   const url = 'http://localhost:8080/api/auth/forgetpassword'
-  const data = {}
+  // const data = {}
 
   // response.data.msg
 

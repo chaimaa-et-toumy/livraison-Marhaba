@@ -15,7 +15,7 @@ function Register() {
 
 
   const url = 'http://localhost:8080/api/auth/register'
-  const data = {}
+  // const data = {}
 
   const handleChange = (e) => {
     const {name,value} = e.target

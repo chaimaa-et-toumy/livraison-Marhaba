@@ -11,7 +11,7 @@ function Login() {
   let [formValues, setFormValues] = useState({...initialValues})
 
   const url = 'http://localhost:8080/api/auth/login'
-  const data = {}
+  // const data = {}
 
   const handleChange = (e) => {
     const {name,value} = e.target

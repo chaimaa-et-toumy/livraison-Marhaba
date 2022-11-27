@@ -11,7 +11,7 @@ function Navbar() {
         console.log(response)
         if(token_){
           localStorage.removeItem('token')
-          window.location = "/login"
+          window.location = "/"
         }})
         .catch((err)=>{
         console.log(err)
