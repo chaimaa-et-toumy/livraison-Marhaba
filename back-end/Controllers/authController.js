@@ -35,7 +35,7 @@ const Login = async(req,res) => {
             token : token,
         })
     }else if(user_ && (await bycrpt.compare(password,user_.password)) && user_.isVerifed !== true){
-         res.status(400).send('first verify your email address to login')
+         res.status(401).send('first verify your email address to login')
         
     }
     else if(user_ && (await bycrpt.compare(password,user_.password) !== true)){
@@ -43,12 +43,12 @@ const Login = async(req,res) => {
         
     }
     else{
-         res.status(400).send('user not exist')
+         res.status(404).send('user not exist')
         
     } 
 }
 catch(error){
-     res.send(error)
+    console.log(error)
 }
 
 }
