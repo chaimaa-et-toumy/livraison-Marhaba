@@ -13,6 +13,4 @@ services:
       - "3000:3000"
     volumes:
       - ./front-end/src:/app/src
-  # volumes:
-  #   database:
-  #     driver: local
+ 
